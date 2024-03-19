@@ -7,10 +7,10 @@ import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
 from typing import Tuple
-import random
 import logging
 import io
 from ReplayMemory import ReplayMemory
+import secrets
 
 def select_dummy_action(state: np.array) -> int:
     """Select a random (valid) move, given a board state.
@@ -36,11 +36,11 @@ def select_model_action(device: torch.device, model: Network, state: torch.tenso
     Returns:
     Tuple[torch.tensor, bool] -- The action, and a bool indicating whether
     the action is random or not."""
-    sample = random.random()
+    sample = secrets.SystemRandom().random()
     if sample > eps:
         return model.act(state), False
     else:
-        return (torch.tensor([[random.randrange(0, 9)]],device=device,dtype=torch.long,),True,)
+        return (torch.tensor([[secrets.SystemRandom().randrange(0, 9)]],device=device,dtype=torch.long,),True,)
 
 def train(n_steps: int = 100_000, # 500_000
           batch_size: int = 128,
