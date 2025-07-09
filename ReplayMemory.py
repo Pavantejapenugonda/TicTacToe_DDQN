@@ -1,5 +1,6 @@
-import random
 from collections import namedtuple
+import secrets
+
 Transition = namedtuple("Transition", ("state", "action", "next_state", 
 "reward"))
 # namedtuple is like a light weight class with fields
@@ -22,6 +23,6 @@ class ReplayMemory(object):
         self.memory[self.position] = Transition(*args)
         self.position = (self.position + 1) % self.capacity
     def sample(self, batch_size):
-        return random.sample(self.memory, batch_size) # randomly selected samples
+        return secrets.SystemRandom().sample(self.memory, batch_size) # randomly selected samples
     def __len__(self):
         return len(self.memory)
